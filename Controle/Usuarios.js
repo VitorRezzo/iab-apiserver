@@ -3,6 +3,19 @@ import {openDb} from "../config/BDSqlite.js";
 var nomeUsuario;
 var senhaUsuario;
 
+//pegar nome e senha  do front end
+export function LogUsuario(req,res){
+  nomeUsuario = req.body.nome;  
+  senhaUsuario = req.body.senha;   
+}
+
+export async function AutenticaUsuario(req,res){
+
+  await openDb().then( (db)=>{
+    db.get('SELECT * FROM Usuario WHERE nome=? AND senha=?',[nomeUsuario,senhaUsuario]).then(User => res.json(User)) 
+}).catch((error)=>console.log(error)) 
+}
+
 export async function CadastraUsuario(req,res){
     let  nome = req.body.nome;
     let  senha = req.body.senha;   
@@ -34,21 +47,6 @@ export async function SelectUsuario(req,res){
       })  
 }
 
-//pegar nome e senha  do front end
-export function LogUsuario(req,res){
-  nomeUsuario = req.body.nome;  
-  senhaUsuario = req.body.senha;   
-}
-
-
-export async function AutenticaUsuario(req,res){
-
-  await openDb().then( (db)=>{
-    db.get('SELECT * FROM Usuario WHERE nome=? AND senha=?',[nomeUsuario,senhaUsuario]).then(User => res.json(User)) 
-}).catch((error)=>console.log(error)) 
-}
-
-
 
 export async function DeleteUsuario(req,res){
     let  id = req.body.id;   
@@ -59,7 +57,6 @@ export async function DeleteUsuario(req,res){
         "statusCode":200
       }) 
 }
-
 
 export async function AtualizaUsuario(req,res){
     let id = req.body.id;
