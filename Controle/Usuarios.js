@@ -1,20 +1,36 @@
+
 import {openDb} from "../config/BDSqlite.js";
+import {Token} from "../config/GeradorToken.js";
 
 var nomeUsuario;
 var senhaUsuario;
 
-//pegar nome e senha  do front end
-export function LogUsuario(req,res){
+//Pegar nome e senha  do front end
+export async function DataUsuario(req,res){
   nomeUsuario = req.body.nome;  
-  senhaUsuario = req.body.senha;   
+  senhaUsuario = req.body.senha; 
+  
+
 }
 
-export async function AutenticaUsuario(req,res){
-
+export async function LoginUsuario(req,res){
+  
   await openDb().then( (db)=>{
-    db.get('SELECT * FROM Usuario WHERE nome=? AND senha=?',[nomeUsuario,senhaUsuario]).then(User => res.json(User)) 
-}).catch((error)=>console.log(error)) 
+    db.get('SELECT * FROM Usuario WHERE nome=? AND senha=?',[nomeUsuario,senhaUsuario])
+    .then(response=> {
+      response.token =  Token(response.id);
+      res.json( {auth:true,nome: response.nome, token:response.token} )
+    }
+      )
+}).catch((error)=>res.send(error)) 
 }
+
+
+export async function AutenticaUser(req,res){
+res.json({auth:true,message:"Usuario autenticado"})
+
+}
+
 
 export async function CadastraUsuario(req,res){
     let  nome = req.body.nome;

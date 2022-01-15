@@ -10,7 +10,9 @@ const app = express();
 
 
 var corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'http://192.168.100.8:3000',
+  method:["GET","POST"], 
+  credential:true,
   optionsSuccessStatus: 200,
 }
 
@@ -20,7 +22,7 @@ app.use(bodyParser.json());
 
 app.use(routerUser);
 //Endereço e Porta do servidor
-const host = '127.0.0.1';
+const host = '192.168.100.8';
 const port = 3010;
 
 CreateTable();

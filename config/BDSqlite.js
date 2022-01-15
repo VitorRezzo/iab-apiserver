@@ -16,7 +16,7 @@ export function CreateTable(){
 
   async function CreateTableUsuario(){
     openDb().then((db)=>{
-      db.exec('CREATE TABLE IF NOT EXISTS Usuario (id INTEGER PRIMARY KEY, nome TEXT ,senha TEXT ) ')    
+      db.exec('CREATE TABLE IF NOT EXISTS Usuario (id INTEGER PRIMARY KEY, nome TEXT ,senha TEXT,token TEXT ) ')    
     })
   }
 
