@@ -5,7 +5,7 @@ import { open } from 'sqlite'
 export async function openDb () {
 
   return open({
-    filename: './IAB.db',
+    filename: process.env.DB_LOCAL,
     driver: sqlite3.Database
   })
 

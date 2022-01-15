@@ -8,11 +8,6 @@ import {
     AutenticaUser,
   } from "../Controle/Usuarios.js";
 
-
-  var corsOptions = {
-    origin: '192.168.100.8:3000',
-    optionsSuccessStatus: 200,
-  }
   const routerUser = Router();
   
   routerUser.post('/api/CadastraUsuario', CadastraUsuario);
