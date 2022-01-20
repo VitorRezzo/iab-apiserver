@@ -6,15 +6,17 @@ import {
     DataUsuario,
     LoginUsuario,
     AutenticaUser,
+    SelectUsuario,
   } from "../Controle/Usuarios.js";
 
   const routerUser = Router();
   
-  routerUser.post('/api/CadastraUsuario', CadastraUsuario);
+  routerUser.post('/api/CadastraUsuario',verifyJWT,CadastraUsuario);
   routerUser.post('/api/PostUsuario', DataUsuario);
   routerUser.get('/api/LoginUsuario',LoginUsuario);
   routerUser.get('/api/AutenticaUser',verifyJWT,AutenticaUser);
-  routerUser.put('/api/AtualizaUsuario', AtualizaUsuario);
+  routerUser.get('/api/SelectUsuario',verifyJWT,SelectUsuario);
+  routerUser.put('/api/AtualizaUsuario', verifyJWT,AtualizaUsuario);
   
   export default routerUser;
 

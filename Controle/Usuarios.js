@@ -1,16 +1,17 @@
 
+import { response } from "express";
 import {openDb} from "../config/BDSqlite.js";
 import {Token} from "../config/GeradorToken.js";
 
+var idUsuario;
 var nomeUsuario;
 var senhaUsuario;
 
-//Pegar nome e senha  do front end
+//Pegar dados usuario  do front end
 export async function DataUsuario(req,res){
-  nomeUsuario = req.body.nome;  
-  senhaUsuario = req.body.senha; 
-  
-
+    idUsuario = req.body.id; 
+    nomeUsuario = req.body.nome;  
+    senhaUsuario = req.body.senha;
 }
 
 export async function LoginUsuario(req,res){
@@ -18,8 +19,14 @@ export async function LoginUsuario(req,res){
   await openDb().then( (db)=>{
     db.get('SELECT * FROM Usuario WHERE nome=? AND senha=?',[nomeUsuario,senhaUsuario])
     .then(response=> {
-      response.token =  Token(response.id);
-      res.json( {auth:true,nome: response.nome, token:response.token} )
+      try{
+        idUsuario = response.id;
+        nomeUsuario = response.nome;
+        res.json( {auth:true,id:response.id,nome: response.nome, token:Token(response.id)} )
+      }catch{
+        res.json({message:"Usuario ou Senha Errados"})
+      }
+      
     }
       )
 }).catch((error)=>res.send(error)) 
@@ -27,8 +34,7 @@ export async function LoginUsuario(req,res){
 
 
 export async function AutenticaUser(req,res){
-res.json({auth:true,message:"Usuario autenticado"})
-
+res.json({auth:true,id:idUsuario,nome:nomeUsuario,message:"Usuario autenticado"})
 }
 
 
@@ -54,13 +60,13 @@ export async function SelectAllUsuario(req,res){
 
 
 export async function SelectUsuario(req,res){
-    let  nome = req.body.nome;   
+     
     openDb().then( (db)=>{
-         db.get('SELECT * FROM Usuario WHERE nome=?',[nome])         
+         db.get('SELECT * FROM Usuario WHERE id=?',[idUsuario]).then(response=>{
+           res.json(response)
+         })         
     }).catch((error)=>console.log(error))
-    res.json({
-        "statusCode":200
-      })  
+   
 }
 
 
