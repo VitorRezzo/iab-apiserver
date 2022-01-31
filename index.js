@@ -2,7 +2,7 @@
 import express from "express";
 import cors   from  "cors";
 import bodyParser from "body-parser";
-import routerUser from "./Routes/RouterUser.js";
+import router from "./Routes/Router.js";
 import { CreateTable } from "./config/BDSqlite.js";
 import dotenv from "dotenv";
 const app = express();
@@ -20,7 +20,8 @@ app.use(cors(corsOptions))
 
 app.use(bodyParser.json());
 
-app.use(routerUser);
+app.use(router);
+
 
 
 CreateTable();

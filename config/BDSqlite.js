@@ -14,9 +14,16 @@ export async function openDb () {
 
 export function CreateTable(){
 
+
   async function CreateTableUsuario(){
     openDb().then((db)=>{
-      db.exec('CREATE TABLE IF NOT EXISTS Usuario (id INTEGER PRIMARY KEY, nome TEXT ,senha TEXT,token TEXT ) ')    
+      db.exec('CREATE TABLE IF NOT EXISTS Usuario (id INTEGER PRIMARY KEY, nome TEXT ,senha TEXT ) ')    
+    })
+  }
+
+  async function CreateTableMorador(){
+    openDb().then((db)=>{
+      db.exec('CREATE TABLE IF NOT EXISTS Morador (id INTEGER PRIMARY KEY, nomecompleto TEXT ,cpf TEXT,rg TEXT,nascimento TEXT,cidade TEXT,endereco TEXT,contato TEXT,acompanhante INTEGER,quarto TEXT ) ')    
     })
   }
 
@@ -30,7 +37,8 @@ export function CreateTable(){
 
 
 
-  return CreateTableUsuario(),CreateTableProdutos();
+
+  return CreateTableUsuario(),CreateTableProdutos(),CreateTableMorador();
 
 }
 

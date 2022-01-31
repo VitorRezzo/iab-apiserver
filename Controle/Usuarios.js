@@ -1,5 +1,4 @@
 
-import { response } from "express";
 import {openDb} from "../config/BDSqlite.js";
 import {Token} from "../config/GeradorToken.js";
 
