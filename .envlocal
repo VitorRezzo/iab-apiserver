@@ -1,0 +1,10 @@
+#Chave token
+SECRET_TOKEN = jsw451fdaq54152frh5uikl15pç41basd45
+
+#host e porta do servidor
+HOST_SERVER = 192.168.100.8
+PORT_SERVER = 3010
+
+#Local que esta solicitando a API
+HOST_ORIGIN = http://192.168.100.8:3000
+HOST_ORIGINSSl = http://localhost:3000
