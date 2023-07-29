@@ -16,7 +16,9 @@ class UserController {
       const response = await UserService.loginUser(req.body);
       return response.auth
         ? res.status(200).json(response)
-        : res.status(500).json(response);
+        : res
+            .status(401)
+            .json({ message: "Usuário ou senha estão incorretos!" });
     } catch (e) {
       return next(e);
     }
@@ -33,5 +35,4 @@ class UserController {
     }
   }
 }
-
 export default new UserController();

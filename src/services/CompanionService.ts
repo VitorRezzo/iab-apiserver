@@ -99,8 +99,6 @@ class CompanionService {
       where: { id: Companion.id },
     });
 
-    console.log(Companions[0].dataValues.StatusId);
-
     await StatusModel.update(
       { status: "Na Casa" },
       {

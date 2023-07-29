@@ -106,6 +106,7 @@ class PatientService {
     const Patients = await PatientModel.findByPk(Patient.id, {
       include: [{ all: true, nested: true }],
     });
+
     return Patients;
   }
 
@@ -143,13 +144,9 @@ class PatientService {
             },
           },
         },
-        {
-          model: AvatarModel,
-        },
-        {
-          model: StatusModel,
-        },
+        { all: true, nested: true },
       ],
+
       where: {
         // { religion: Patient.religion },
         schooling: { [Op.like]: "%" + Patient.schooling + "%" },

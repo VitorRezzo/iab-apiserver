@@ -78,7 +78,6 @@ class ResidentService {
       },
       where: { age: { [Op.gte]: 60 } },
     });
-    console.log(allPatientElderly);
 
     const TotalResidents: number =
       (allPatientMan + allCompanionMan + allWomanPatient + allWomanCompanion) /
