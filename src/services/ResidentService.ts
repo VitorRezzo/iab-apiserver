@@ -95,40 +95,38 @@ class ResidentService {
   }
 
   async countAllPathologysPatients() {
-    const CountallPathology = [];
-
-    const allPathology = await PatientModel.findAll({
+    const allPatients = await PatientModel.findAll({
+      attributes: ["MedicalRecordId"],
       include: [
         {
           model: MedicalRecordModel,
-          attributes: ["pathology"],
         },
         {
           model: StatusModel,
-          where: {
-            status: "Na Casa",
-          },
+          where: { status: "Na Casa" },
         },
       ],
     });
 
-    const namePathologys = allPathology.map((value: any, index: number) => {
-      return value.MedicalRecord.dataValues.pathology;
+    const MedicalIds = allPatients.map((value: any) => {
+      return value.dataValues.MedicalRecordId;
     });
 
-    const typePathologys = [...new Set(namePathologys)];
+    const MedicalRecord = await MedicalRecordModel.findAll({
+      where: {
+        id: { [Op.in]: MedicalIds },
+      },
+      attributes: [
+        "pathology",
+        [Sequelize.fn("count", Sequelize.col("pathology")), "totalpathology"],
+      ],
+      group: ["pathology"],
+    });
 
-    for (let i = 0; i < typePathologys.length; i++) {
-      CountallPathology[i] = await MedicalRecordModel.count({
-        where: { pathology: typePathologys[i] },
-      });
-    }
-    return { quant: CountallPathology, pathology: typePathologys };
+    return { MedicalRecord };
   }
 
   async listPricesMovementsResidents(move: IMovement) {
-    const TotalPriceMoviments = [];
-
     const PriceMoviments = await MovementModel.findAll({
       where: {
         [Op.and]: [
@@ -142,35 +140,14 @@ class ResidentService {
         ],
       },
       order: [["date", "ASC"]],
-      attributes: ["price", "date"],
-    });
-    const getDates = PriceMoviments.map((value: any) => {
-      return value.dataValues.date;
-    });
-    const datesMoviments = [...new Set(getDates)];
-
-    for (let i = 0; i < datesMoviments.length; i++) {
-      TotalPriceMoviments[i] = await MovementModel.findAll({
-        where: {
-          date: datesMoviments[i],
-        },
-
-        attributes: [
-          "price",
-          "date",
-          [Sequelize.fn("sum", Sequelize.col("price")), "total_price"],
-        ],
-      });
-    }
-
-    const allPriceMoviments = TotalPriceMoviments.map((value: any) => {
-      return {
-        x: value[0].dataValues.date,
-        y: value[0].dataValues.total_price,
-      };
+      attributes: [
+        "date",
+        [Sequelize.fn("sum", Sequelize.col("price")), "totalprice"],
+      ],
+      group: [Sequelize.fn("date", Sequelize.col("date"))],
     });
 
-    return allPriceMoviments;
+    return PriceMoviments;
   }
 }
 export default new ResidentService();
