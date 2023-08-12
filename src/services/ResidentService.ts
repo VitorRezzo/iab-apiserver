@@ -153,7 +153,7 @@ class ResidentService {
     return Prices;
   }
 
-  async listPatientsDeadByYear() {
+  async countPatientsDeadByYear() {
     const PatientsDead = await PatientModel.count({
       include: {
         model: StatusModel,
@@ -162,6 +162,17 @@ class ResidentService {
     });
 
     return { count: PatientsDead };
+  }
+
+  async countPatientsCuredByYear() {
+    const Patientscured = await PatientModel.count({
+      include: {
+        model: StatusModel,
+        where: { status: "Curado" },
+      },
+    });
+
+    return { count: Patientscured };
   }
 }
 export default new ResidentService();
