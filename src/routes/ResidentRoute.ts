@@ -24,6 +24,11 @@ class ResidentRoute {
       verifyJWT,
       ResidenteController.listPricesMovementsResidents
     );
+    Routes.get(
+      "/api/list-patientsdead-byyear",
+      verifyJWT,
+      ResidenteController.listPatientsDeadByYear
+    );
   }
 }
 

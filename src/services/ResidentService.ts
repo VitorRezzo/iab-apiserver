@@ -79,19 +79,14 @@ class ResidentService {
       where: { age: { [Op.gte]: 60 } },
     });
 
-    const TotalResidents: number =
-      (allPatientMan + allCompanionMan + allWomanPatient + allWomanCompanion) /
-      230;
-
-    return {
-      AllMan: allPatientMan + allCompanionMan,
-      AllWoman: allWomanPatient + allWomanCompanion,
-      AllChildren: allPatientChildren + allEcortChildren,
-      AllElderly: allPatientElderly + allEcortElderly,
-      AllPatients: allPatientMan + allWomanPatient,
-      AllCompanions: allCompanionMan + allWomanCompanion,
-      AllResidents: TotalResidents * 100,
-    };
+    return [
+      allPatientMan + allCompanionMan,
+      allWomanPatient + allWomanCompanion,
+      allPatientChildren + allEcortChildren,
+      allPatientElderly + allEcortElderly,
+      allPatientMan + allWomanPatient,
+      allCompanionMan + allWomanCompanion,
+    ];
   }
 
   async countAllPathologysPatients() {
@@ -122,8 +117,13 @@ class ResidentService {
       ],
       group: ["pathology"],
     });
-
-    return { MedicalRecord };
+    const Totalpathology = MedicalRecord.map((value: any) => {
+      return value.dataValues.totalpathology;
+    });
+    const Pathologys = MedicalRecord.map((value: any) => {
+      return value.dataValues.pathology;
+    });
+    return { totalpathology: Totalpathology, pathology: Pathologys };
   }
 
   async listPricesMovementsResidents(move: IMovement) {
@@ -147,7 +147,21 @@ class ResidentService {
       group: [Sequelize.fn("date", Sequelize.col("date"))],
     });
 
-    return PriceMoviments;
+    const Prices = PriceMoviments.map((value: any) => {
+      return { x: value.dataValues.date, y: value.dataValues.totalprice };
+    });
+    return Prices;
+  }
+
+  async listPatientsDeadByYear() {
+    const PatientsDead = await PatientModel.count({
+      include: {
+        model: StatusModel,
+        where: { status: "Óbito" },
+      },
+    });
+
+    return { count: PatientsDead };
   }
 }
 export default new ResidentService();

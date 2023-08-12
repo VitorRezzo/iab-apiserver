@@ -43,6 +43,21 @@ class ResidenteController {
     }
   }
 
+  async listPatientsDeadByYear(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const response = await ResidentService.listPatientsDeadByYear();
+      return response
+        ? res.status(200).json(response)
+        : res.status(500).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
   async listPricesMovementsResidents(
     req: Request,
     res: Response,
