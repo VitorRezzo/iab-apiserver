@@ -15,6 +15,7 @@ interface IAddress {
 interface IStatus {
   StatusId?: number;
   status: string;
+  activity: string;
 }
 
 interface IAvatar {
@@ -46,65 +47,63 @@ interface ICompanion extends IAddress, IStatus, IAvatar {
 
 class CompanionService {
   async registerCompanion(Companion: ICompanion) {
-    const Status = await StatusModel.create({
-      status: Companion.status,
-    });
+    try {
+      const Status = await StatusModel.create({
+        status: Companion.status,
+        activity: "Novo Cadastro",
+      });
 
-    const Addresses = await AddressModel.create({
-      county: Companion.county,
-      street: Companion.street,
-      district: Companion.district,
-      state: Companion.state,
-    });
+      const Addresses = await AddressModel.create({
+        county: Companion.county,
+        street: Companion.street,
+        district: Companion.district,
+        state: Companion.state,
+      });
 
-    const Avatares = await AvatarModel.create({
-      url: Companion.avatarurl,
-    });
+      const Avatares = await AvatarModel.create({
+        url: Companion.avatarurl,
+      });
 
-    const Companions = await CompanionModel.create({
-      fullname: Companion.fullname,
-      cpf: Companion.cpf,
-      birthdate: Companion.birthdate,
-      age: Companion.age,
-      profession: Companion.profession,
-      wage: Companion.wage,
-      schooling: Companion.schooling,
-      addiction: Companion.addiction,
-      bloodtype: Companion.bloodtype,
-      gender: Companion.gender,
-      contact: Companion.contact,
-      religion: Companion.religion,
-      kinship: Companion.kinship,
-      formsunion: Companion.formsunion,
-      civilstatus: Companion.civilstatus,
-      registerdate: Companion.registerdate,
-      StatusId: Status.id,
-      AddressId: Addresses.id,
-      AvatarId: Avatares.id,
-    });
+      const Companions = await CompanionModel.create({
+        fullname: Companion.fullname,
+        cpf: Companion.cpf,
+        birthdate: Companion.birthdate,
+        age: Companion.age,
+        profession: Companion.profession,
+        wage: Companion.wage,
+        schooling: Companion.schooling,
+        addiction: Companion.addiction,
+        bloodtype: Companion.bloodtype,
+        gender: Companion.gender,
+        contact: Companion.contact,
+        religion: Companion.religion,
+        formsunion: Companion.formsunion,
+        civilstatus: Companion.civilstatus,
+        registerdate: Companion.registerdate,
+        StatusId: Status.id,
+        AddressId: Addresses.id,
+        AvatarId: Avatares.id,
+      });
 
-    await PatientsCompanions.create({
-      PatientId: Companion.PatientId,
-      CompanionId: Companions.id,
-    });
+      await PatientsCompanions.create({
+        kinship: Companion.kinship,
+        PatientId: Companion.PatientId,
+        CompanionId: Companions.id,
+      });
+    } catch (err) {
+      return err;
+    }
   }
 
   async associateCompanionPatient(Companion: ICompanion) {
-    await PatientsCompanions.create({
-      PatientId: Companion.PatientId,
-      CompanionId: Companion.id,
-    });
-
-    const Companions = await CompanionModel.findAll({
-      where: { id: Companion.id },
-    });
-
-    await StatusModel.update(
-      { status: "Na Casa" },
-      {
-        where: { id: Companions[0].dataValues.StatusId },
-      }
-    );
+    try {
+      await PatientsCompanions.create({
+        PatientId: Companion.PatientId,
+        CompanionId: Companion.id,
+      });
+    } catch (err) {
+      return err;
+    }
   }
 
   async listAllCompanions() {
@@ -190,10 +189,8 @@ class CompanionService {
       where: { id: Companion.id },
     });
 
-    console.log(Companions[0].dataValues.StatusId);
-
     await StatusModel.update(
-      { status: "Viagem" },
+      { status: "Viagem", activity: "Saiu do IAB" },
       {
         where: { id: Companions[0].dataValues.StatusId },
       }
@@ -206,6 +203,14 @@ class CompanionService {
     await StatusModel.update(
       {
         status: Companion.status,
+        activity:
+          Companion.status === "Na Casa"
+            ? "Retornou para IAB"
+            : Companion.status === "Internado"
+            ? "Internação"
+            : Companion.status === "Viagem"
+            ? "Viajando"
+            : "Exame",
       },
       {
         where: {

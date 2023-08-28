@@ -61,10 +61,6 @@ export const CompanionModel: any = DBSqlite.define("Companion", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  kinship: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   civilstatus: {
     type: DataTypes.STRING,
     allowNull: true,

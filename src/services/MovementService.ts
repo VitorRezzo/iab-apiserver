@@ -1,6 +1,7 @@
 import { Op } from "sequelize";
 import { MovementModel } from "../models/MovementModel";
 import { MovementsCompanion } from "../models/MovementsCompanion";
+import { StatusModel } from "../models/StatusModel";
 
 interface IMovement {
   id?: number;
@@ -12,6 +13,7 @@ interface IMovement {
   transport: string;
   procedure: string;
   idPatient: number;
+  idStatus: number;
   idCompanion: Array<{ id: string }>;
   startdate: string;
   enddate?: string;
@@ -35,6 +37,22 @@ class MovementService {
         MovementId: moves.id,
         CompanionId: Companion.id,
       });
+      await StatusModel.update(
+        {
+          status:
+            move.procedure === "Internação"
+              ? "Internado"
+              : move.procedure === "Viagem"
+              ? move.procedure
+              : "Na Casa",
+          activity: move.procedure,
+        },
+        {
+          where: {
+            id: move.idStatus,
+          },
+        }
+      );
     });
     return moves;
   }
@@ -79,10 +97,7 @@ class MovementService {
   }
 
   async getMovementsById(move: IMovement) {
-    const moves = await MovementModel.findAll({
-      where: {
-        id: move.id,
-      },
+    const moves = await MovementModel.findByPk(move.id, {
       include: [{ all: true, nested: true }],
     });
     return moves;

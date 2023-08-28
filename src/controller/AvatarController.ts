@@ -10,7 +10,7 @@ class AvatarController {
     }
   }
 
-  async removeAvatarByName(req: Request, res: Response, next: NextFunction) {
+  async removeAvatarByName(req: Request, res: Response) {
     const fileName = req.params.name;
     const directoryPath = path.join(__dirname, "../upload/");
     try {

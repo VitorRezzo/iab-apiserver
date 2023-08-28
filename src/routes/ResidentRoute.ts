@@ -34,6 +34,16 @@ class ResidentRoute {
       verifyJWT,
       ResidenteController.countPatientsCuredByYear
     );
+    Routes.get(
+      "/api/list-residents-address",
+      verifyJWT,
+      ResidenteController.listResidentsAddress
+    );
+    Routes.get(
+      "/api/list-residents-Activity",
+      verifyJWT,
+      ResidenteController.listResidentsActivity
+    );
   }
 }
 

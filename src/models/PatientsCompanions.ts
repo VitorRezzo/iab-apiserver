@@ -8,4 +8,8 @@ export const PatientsCompanions: any = DBSqlite.define("Patients_Companions", {
     autoIncrement: true,
     primaryKey: true,
   },
+  kinship: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });

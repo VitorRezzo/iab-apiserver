@@ -15,7 +15,7 @@ class PatientController {
 
   async getPatientsById(req: Request, res: Response, next: NextFunction) {
     const id = { id: req.params.id } as any;
-    console.log(id);
+
     try {
       const response = await PatientService.getPatientsById(id);
       return response

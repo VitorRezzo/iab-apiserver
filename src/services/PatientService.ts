@@ -26,6 +26,7 @@ interface IAddress {
 interface IStatus {
   StatusId: string;
   status: string;
+  activity: string;
 }
 
 interface IAvatar {
@@ -59,6 +60,7 @@ class PatientService {
   async registerPatients(Patient: IPatient) {
     const Status = await StatusModel.create({
       status: Patient.status,
+      activity: "Novo Cadastro",
     });
     const Addresses = await AddressModel.create({
       county: Patient.county,
@@ -185,6 +187,14 @@ class PatientService {
     await StatusModel.update(
       {
         status: Patient.status,
+        activity:
+          Patient.status === "Na Casa"
+            ? "Retornou para IAB"
+            : Patient.status === "Internado"
+            ? "Internação"
+            : Patient.status === "Viagem"
+            ? "Viajando"
+            : "Exame",
       },
       {
         where: {

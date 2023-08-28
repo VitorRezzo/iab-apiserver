@@ -73,6 +73,17 @@ class ResidenteController {
     }
   }
 
+  async listResidentsAddress(req: Request, res: Response, next: NextFunction) {
+    try {
+      const response = await ResidentService.listResidentsAddress();
+      return response
+        ? res.status(200).json(response)
+        : res.status(500).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
   async listPricesMovementsResidents(
     req: Request,
     res: Response,
@@ -82,6 +93,17 @@ class ResidenteController {
       const response = await ResidentService.listPricesMovementsResidents(
         req.body
       );
+      return response
+        ? res.status(200).json(response)
+        : res.status(500).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  async listResidentsActivity(req: Request, res: Response, next: NextFunction) {
+    try {
+      const response = await ResidentService.listResidentsActivity();
       return response
         ? res.status(200).json(response)
         : res.status(500).json(response);

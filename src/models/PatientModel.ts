@@ -6,6 +6,7 @@ import { CompanionModel } from "./CompanionModel";
 import { MedicalRecordModel } from "./MedicalRecordModel";
 import { PatientsCompanions } from "./PatientsCompanions";
 import { StatusModel } from "./StatusModel";
+
 export const PatientModel: any = DBSqlite.define("Patients", {
   id: {
     type: DataTypes.INTEGER,
@@ -106,3 +107,4 @@ PatientModel.belongsTo(MedicalRecordModel, {
 });
 
 PatientModel.belongsToMany(CompanionModel, { through: PatientsCompanions });
+CompanionModel.belongsToMany(PatientModel, { through: PatientsCompanions });

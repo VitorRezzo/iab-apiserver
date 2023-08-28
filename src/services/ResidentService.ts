@@ -5,7 +5,7 @@ import { PatientModel } from "../models/PatientModel";
 import { MedicalRecordModel } from "../models/MedicalRecordModel";
 import { MovementModel } from "../models/MovementModel";
 import { StatusModel } from "../models/StatusModel";
-
+import { AddressModel } from "../models/AddressModel";
 interface IMovement {
   startdate: string;
   enddate: string;
@@ -173,6 +173,101 @@ class ResidentService {
     });
 
     return { count: Patientscured };
+  }
+
+  async listResidentsAddress() {
+    const Patients = await PatientModel.findAll({
+      include: [
+        {
+          model: AddressModel,
+        },
+        {
+          model: StatusModel,
+          where: { status: "Na Casa" },
+        },
+      ],
+    });
+
+    const Companion = await CompanionModel.findAll({
+      include: [
+        {
+          model: AddressModel,
+        },
+        {
+          model: StatusModel,
+          where: { status: "Na Casa" },
+        },
+      ],
+    });
+    const PatientsId = Patients.map((value: any) => {
+      return value.dataValues.Address.id;
+    });
+    const CompanionId = Companion.map((value: any) => {
+      return value.dataValues.Address.id;
+    });
+    const PatientIdAndCompanionId = [...CompanionId, ...PatientsId];
+
+    const ResidentsAddress = await AddressModel.findAll({
+      where: { id: { [Op.in]: PatientIdAndCompanionId } },
+      attributes: [
+        "county",
+        "state",
+        [Sequelize.fn("COUNT", Sequelize.col("county")), "totalcounty"],
+      ],
+      group: ["county"],
+    });
+
+    const Addresses = ResidentsAddress.map((value: any) => {
+      return {
+        x: `${value.dataValues.county} - ${value.dataValues.state}`,
+        y: value.dataValues.totalcounty,
+      };
+    });
+
+    return Addresses;
+  }
+
+  async listResidentsActivity() {
+    const PatientResidents = await PatientModel.findAll({
+      limit: 6,
+      include: {
+        model: StatusModel,
+      },
+    });
+
+    const CompanionResidents = await CompanionModel.findAll({
+      limit: 6,
+      include: [
+        {
+          model: StatusModel,
+        },
+      ],
+    });
+
+    const patientStatus = PatientResidents.map((value: any) => {
+      return {
+        status: value.dataValues.Status.status,
+        name: value.dataValues.fullname,
+        activity: value.dataValues.Status.activity,
+        updatedAt: value.dataValues.Status.updatedAt,
+      };
+    });
+    const companionStatus = CompanionResidents.map((value: any) => {
+      return {
+        status: value.dataValues.Status.status,
+        name: value.dataValues.fullname,
+        activity: value.dataValues.Status.activity,
+        updatedAt: value.dataValues.Status.updatedAt,
+      };
+    });
+
+    const AllResidents = [...patientStatus, ...companionStatus];
+
+    const OrderDescResidents = AllResidents.sort(
+      (a, b) => b.updatedAt - a.updatedAt
+    );
+
+    return OrderDescResidents;
   }
 }
 export default new ResidentService();

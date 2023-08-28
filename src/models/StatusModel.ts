@@ -12,4 +12,8 @@ export const StatusModel: any = DBSqlite.define("Status", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  activity: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });

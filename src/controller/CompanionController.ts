@@ -5,9 +5,13 @@ class CompanionController {
   async registerCompanion(req: Request, res: Response, next: NextFunction) {
     try {
       const response = await CompanionService.registerCompanion(req.body);
-      return res
-        .status(201)
-        .json({ response, message: "Acompanhante cadastrado com sucesso!" });
+
+      return response?.errors[0]?.message === "cpf must be unique"
+        ? res.status(400).json({ response, message: "Acompanhante Já existe!" })
+        : res.status(201).json({
+            response,
+            message: "Acompanhante cadastrado com sucesso!",
+          });
     } catch (e) {
       return next(e);
     }
@@ -22,7 +26,15 @@ class CompanionController {
       const response = await CompanionService.associateCompanionPatient(
         req.body
       );
-      return res.status(201).json(response);
+      return response?.errors[1]?.message === "CompanionId must be unique"
+        ? res.status(400).json({
+            response,
+            message: "Acompanhante Já está Associado ao Paciente!",
+          })
+        : res.status(201).json({
+            response,
+            message: "Acompanhante Associado com sucesso!",
+          });
     } catch (e) {
       return next(e);
     }
