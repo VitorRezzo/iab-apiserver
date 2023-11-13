@@ -1,18 +1,18 @@
 import { Router } from "express";
-import LoginRoute from "./LoginRoute";
-import MovementRoute from "./MovementRoute";
-import PatientRoute from "./PatientRoute";
-import CompanionRoute from "./CompanionRoute";
+import UsersRoute from "./UsersRoute";
+// import MovementRoute from "./MovementRoute";
+import PatientsRoute from "./PatientsRoute";
+import CompanionRoute from "./CompanionsRoute";
 import AvatarRoute from "./AvatarRoute";
-import GraphRoute from "./GraphRoute";
-import ResidentRoute from "./ResidentRoute";
+// import GraphRoute from "./GraphRoute";
+import ResidentsRoute from "./ResidentsRoute";
 
 export const Route: Router = Router();
 
-LoginRoute.allLoginRoutes(Route);
-MovementRoute.allMovementRoutes(Route);
-PatientRoute.allPatientRoutes(Route);
+UsersRoute.allUsersRoutes(Route);
+PatientsRoute.allPatientsRoutes(Route);
 CompanionRoute.allCompanionsRoutes(Route);
 AvatarRoute.allAvatarRoutes(Route);
-ResidentRoute.allResidentRoutes(Route);
-GraphRoute.allGraphRoutes(Route);
+// MovementRoute.allMovementRoutes(Route);
+ResidentsRoute.allResidentsRoutes(Route);
+// GraphRoute.allGraphRoutes(Route);

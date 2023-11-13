@@ -6,14 +6,15 @@ import {
 } from "sequelize";
 import { sequelize } from "../config/config";
 
-class AvatarModel extends Model<
-  InferAttributes<AvatarModel>,
-  InferCreationAttributes<AvatarModel>
+class MedicinesModel extends Model<
+  InferAttributes<MedicinesModel>,
+  InferCreationAttributes<MedicinesModel>
 > {
   declare id: number;
-  declare url: string;
+  declare remedy: string;
+  declare description: string;
 }
-AvatarModel.init(
+MedicinesModel.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -21,16 +22,20 @@ AvatarModel.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    url: {
+    remedy: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    description: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   },
   {
     sequelize,
-    modelName: "Avatares",
+    modelName: "Medicines",
     timestamps: false,
   }
 );
 
-export default AvatarModel;
+export default MedicinesModel;

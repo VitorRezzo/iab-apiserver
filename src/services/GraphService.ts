@@ -1,8 +1,9 @@
-import { CompanionModel } from "../models/CompanionModel";
-import { PatientModel } from "../models/PatientModel";
-import { AddressModel } from "../models/AddressModel";
-import { MedicalRecordModel } from "../models/MedicalRecordModel";
-import { StatusModel } from "../models/StatusModel";
+/*
+import { CompanionModel } from "../../models/CompanionModel";
+import { PatientModel } from "../../models/PatientModel";
+import { AddressModel } from "../../models/AddressModel";
+import { MedicalRecordModel } from "../../models/MedicalRecordModel";
+import { StatusModel } from "../../models/StatusModel";
 import { Op } from "sequelize";
 import moment from "moment";
 interface IGraph {
@@ -514,3 +515,4 @@ class GraphService {
 }
 
 export default new GraphService();
+*/

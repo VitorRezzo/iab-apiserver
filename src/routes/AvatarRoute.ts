@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UploadsAvatar } from "../features/Uploads";
+import { UploadsAvatar } from "../util/Uploads";
 import multer from "multer";
 import AvatarController from "../controller/AvatarController";
 

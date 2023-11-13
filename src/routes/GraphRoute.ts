@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verifyJWT } from "../features/JwToken";
+import { verifyJWT } from "../util/JwToken";
 import GraphController from "../controller/GraphController";
 
 class GraphRouter {

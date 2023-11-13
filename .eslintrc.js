@@ -24,6 +24,7 @@ module.exports = {
     "no-sequences": "off",
     "no-unused-vars": "warn",
     "no-undef": "off",
+    "no-use-before-define": "off",
   },
   settings: {
     "import/resolver": {

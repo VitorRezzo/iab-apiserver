@@ -6,17 +6,18 @@ import {
 } from "sequelize";
 import { sequelize } from "../config/config";
 
-class AddressModel extends Model<
-  InferAttributes<AddressModel>,
-  InferCreationAttributes<AddressModel>
+class MovimentsModel extends Model<
+  InferAttributes<MovimentsModel>,
+  InferCreationAttributes<MovimentsModel>
 > {
   declare id: number;
-  declare county: string;
-  declare district: string;
-  declare street: string;
-  declare state: string;
+  declare procedure: string;
+  declare description: string;
+  declare destiny: string;
+  declare date: string;
+  declare hour: string;
 }
-AddressModel.init(
+MovimentsModel.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -24,28 +25,32 @@ AddressModel.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    county: {
+    procedure: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    district: {
+    destiny: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    street: {
+    description: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    state: {
+    date: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    hour: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   },
   {
     sequelize,
-    modelName: "Addresses",
+    modelName: "Movements",
     timestamps: false,
   }
 );
 
-export default AddressModel;
+export default MovimentsModel;

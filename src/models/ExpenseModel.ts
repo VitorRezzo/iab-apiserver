@@ -6,17 +6,17 @@ import {
 } from "sequelize";
 import { sequelize } from "../config/config";
 
-class StatusModel extends Model<
-  InferAttributes<StatusModel>,
-  InferCreationAttributes<StatusModel>
+class ExpenseModel extends Model<
+  InferAttributes<ExpenseModel>,
+  InferCreationAttributes<ExpenseModel>
 > {
   declare id: number;
-  declare status: string;
-  declare activity: string;
-  declare createdAt: Date;
-  declare updatedAt: Date;
+  declare subject: string;
+  declare description: string;
+  declare typepayment: string;
+  declare price: string;
 }
-StatusModel.init(
+ExpenseModel.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -24,27 +24,28 @@ StatusModel.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    status: {
+    subject: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    activity: {
+    description: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    createdAt: {
-      type: DataTypes.DATE,
+    typepayment: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    updatedAt: {
-      type: DataTypes.DATE,
+    price: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
   {
     sequelize,
-    modelName: "Statuses",
+    modelName: "Expenses",
+    timestamps: false,
   }
 );
 
-export default StatusModel;
+export default ExpenseModel;

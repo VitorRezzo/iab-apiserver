@@ -6,17 +6,17 @@ import {
 } from "sequelize";
 import { sequelize } from "../config/config";
 
-class StatusModel extends Model<
-  InferAttributes<StatusModel>,
-  InferCreationAttributes<StatusModel>
+class UsersModel extends Model<
+  InferAttributes<UsersModel>,
+  InferCreationAttributes<UsersModel>
 > {
   declare id: number;
-  declare status: string;
-  declare activity: string;
-  declare createdAt: Date;
-  declare updatedAt: Date;
+  declare fullname: string;
+  declare username: string;
+  declare password: string;
+  declare active: boolean;
 }
-StatusModel.init(
+UsersModel.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -24,27 +24,29 @@ StatusModel.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    status: {
+    fullname: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    activity: {
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
+    active: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
   },
   {
     sequelize,
-    modelName: "Statuses",
+    modelName: "Users",
+    timestamps: false,
   }
 );
 
-export default StatusModel;
+export default UsersModel;
